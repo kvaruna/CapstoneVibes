@@ -22,10 +22,14 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.circular_bar_pager_library.CircularBarPager;
+import com.example.varun.pushit.Adapters.AdapterPagerWorkout;
 import com.example.varun.pushit.Data.DBHelperWorkouts;
+import com.example.varun.pushit.R;
 import com.example.varun.pushit.Utils.Utils;
+import com.example.varun.pushit.Views.ViewWorkout;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 

@@ -36,7 +36,6 @@ public class HomeActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         // Connect view objects with view ids in xml
         mHeaderView         = findViewById(R.id.header);
         mToolbar            = (Toolbar) findViewById(R.id.toolbar);
@@ -124,7 +123,7 @@ public class HomeActivity extends AppCompatActivity implements
         // On day selected open ActivityWorkouts and pass
         // selected values to that activity
 
-        /Intent detailIntent = new Intent(this, ActivityWorkouts.class);
+        Intent detailIntent = new Intent(this, ActivityWorkouts.class);
         detailIntent.putExtra(Utils.ARG_WORKOUT_ID, selectedID);
         detailIntent.putExtra(Utils.ARG_WORKOUT_NAME, selectedName);
         detailIntent.putExtra(Utils.ARG_PARENT_PAGE, Utils.ARG_PROGRAMS);
@@ -136,7 +135,7 @@ public class HomeActivity extends AppCompatActivity implements
     public void onClick(View v) {
 
 
-        Intent i= new Intent(ActivityHome.this,ActivityNotes.class);
+        Intent i= new Intent(HomeActivity.this,ActivityNotes.class);
         startActivity(i);
 
 

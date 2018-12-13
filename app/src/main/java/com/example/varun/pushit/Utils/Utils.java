@@ -27,7 +27,7 @@ public class Utils {
 
     // Configurable parameters. you can configure these parameter.
     // Set database path. It must be similar with package name.
-    public static final String ARG_DATABASE_PATH = "/data/data/com.udacity.fitness_workout/databases/";
+    public static final String ARG_DATABASE_PATH = "/data/data/com.example.varun.pushit/databases/";
 
     // Set default break time
     public static final String ARG_DEFAULT_BREAK = "00:10";

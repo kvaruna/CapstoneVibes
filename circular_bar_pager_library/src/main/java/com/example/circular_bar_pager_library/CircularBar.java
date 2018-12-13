@@ -562,7 +562,7 @@ public class CircularBar extends View implements Animator.AnimatorListener {
      */
     public void animateProgress(int start, int end, int duration) {
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(Glider.glide(Skill.QuadEaseInOut, duration, ObjectAnimator.ofFloat(this, "progress", start, end)));
+
         set.setDuration(duration);
         set = addListenersToSet(set);
         set.start();

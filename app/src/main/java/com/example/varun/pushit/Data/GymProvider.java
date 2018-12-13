@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class GymProvider extends ContentProvider {
 
-    static final String PROVIDER_NAME = "com.udacity.fitness_workout.Gym_Workout";
+    static final String PROVIDER_NAME = "com.example.varun.pushit.Gym_Workout";
     static final String URL = "content://" + PROVIDER_NAME + "/gym";
     public static final Uri CONTENT_URI = Uri.parse(URL);
 
