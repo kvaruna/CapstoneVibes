@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/circular_bar_pager_library" />
+            <option value="$PROJECT_DIR$/material_preferences_library" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
