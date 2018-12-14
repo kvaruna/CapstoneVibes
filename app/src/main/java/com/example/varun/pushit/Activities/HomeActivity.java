@@ -3,10 +3,12 @@ package com.example.varun.pushit.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,10 @@ import com.example.varun.pushit.Fragments.FragmentPrograms;
 import com.example.varun.pushit.R;
 import com.example.varun.pushit.Utils.Utils;
 import com.gigamole.navigationtabbar.ntb.NavigationTabBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 
@@ -40,7 +46,13 @@ public class HomeActivity extends AppCompatActivity implements
         mHeaderView         = findViewById(R.id.header);
         mToolbar            = (Toolbar) findViewById(R.id.toolbar);
         mPager              = (ViewPager) findViewById(R.id.pager);
-
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        Log.d("THis is fcm",""+task.getResult().getToken());
+                    }
+                });
         // Set adapter object
         mAdapterNavigation  = new AdapterNavigation(this, getSupportFragmentManager());
 
