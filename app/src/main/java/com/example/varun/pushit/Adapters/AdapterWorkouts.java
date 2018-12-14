@@ -1,12 +1,12 @@
 package com.example.varun.pushit.Adapters;
 
 import android.app.Activity;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,11 +17,11 @@ import com.example.varun.pushit.R;
 import com.example.varun.pushit.Utils.ImageLoader;
 import com.example.varun.pushit.Utils.Utils;
 import com.github.mrengineer13.snackbar.SnackBar;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
-public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHolder>
-{
+public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHolder> {
     // Create arraylist variables to store data
     private final ArrayList<String> mProgramIds;
     private final ArrayList<String> mWorkoutIds;
@@ -50,12 +50,12 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
     public AdapterWorkouts(Activity activity, String selectedDay, String parentPage,
                            DBHelperPrograms dbHelperPrograms) {
 
-        this.mProgramIds    = new ArrayList<>();
-        this.mWorkoutIds    = new ArrayList<>();
-        this.mWorkoutNames  = new ArrayList<>();
+        this.mProgramIds = new ArrayList<>();
+        this.mWorkoutIds = new ArrayList<>();
+        this.mWorkoutNames = new ArrayList<>();
         this.mWorkoutImages = new ArrayList<>();
-        this.mWorkoutTimes  = new ArrayList<>();
-        this.mWorkoutSteps  = new ArrayList<>();
+        this.mWorkoutTimes = new ArrayList<>();
+        this.mWorkoutSteps = new ArrayList<>();
 
         mActivity = activity;
 
@@ -79,24 +79,18 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
-    {
-        View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.adapter_list, null);
-
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_list_workouts,viewGroup, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position)
-    {
-        viewHolder.mItemContainer.setOnClickListener(new View.OnClickListener()
-        {
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        viewHolder.mItemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 if (onTapListener != null)
-                    onTapListener.onTapView(mWorkoutIds.get(position),mWorkoutNames.get(position));
+                    onTapListener.onTapView(mWorkoutIds.get(position), mWorkoutNames.get(position));
             }
         });
 
@@ -105,11 +99,11 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
             public void onClick(View v) {
                 // If AdapterWorkouts generated from workout category tab, show showDayListDialog
                 // when action button clicked.
-                if(sParentPage.equals(Utils.ARG_WORKOUTS)){
+                if (sParentPage.equals(Utils.ARG_WORKOUTS)) {
                     showDayListDialog(position);
                     // Else if AdapterWorkouts generated from day program tab, showAlertDialog
                     // when action button clicked.
-                }else if(sParentPage.equals(Utils.ARG_PROGRAMS)){
+                } else if (sParentPage.equals(Utils.ARG_PROGRAMS)) {
                     showAlertDialog(position, mSelectedDay);
                 }
             }
@@ -128,11 +122,11 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
     }
 
     // Method to create alert dialog
-    public void showAlertDialog(int i, String selectedDay){
+    public void showAlertDialog(int i, String selectedDay) {
         final int position = i;
         final String day = mDays[(Integer.valueOf(selectedDay) - 1)];
-        String confirmMessage = mActivity.getString(R.string.confirm_message)+" "+
-                day+" "+mActivity.getString(R.string.program) + "?";
+        String confirmMessage = mActivity.getString(R.string.confirm_message) + " " +
+                day + " " + mActivity.getString(R.string.program) + "?";
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.confirm)
                 .content(confirmMessage)
@@ -182,8 +176,8 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
                 .positiveText(R.string.add)
                 .negativeText(R.string.cancel)
                 .cancelable(false)
-                .positiveColorRes(R.color.primary_color)
-                .negativeColorRes(R.color.primary_color)
+                .positiveColorRes(R.color.text_and_icon_color)
+                .negativeColorRes(R.color.text_and_icon_color)
                 // When positive button clicked
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
@@ -230,15 +224,14 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
     }
 
     // Method to show snackbar message
-    public void showSnackbar(String message){
+    public void showSnackbar(String message) {
         new SnackBar.Builder(mActivity)
                 .withMessage(message)
                 .show();
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return mWorkoutIds.size();
     }
 
@@ -246,19 +239,17 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
         // Create view objects
         private ImageView mImgThumbnail;
         private TextView mTxtTitle, mTxtTime;
-        private RelativeLayout mBtnAction;
-        private RelativeLayout mItemContainer;
+        private IconicsImageView mBtnAction;
+        private ConstraintLayout mItemContainer;
 
-        public ViewHolder(View v)
-        {
+        public ViewHolder(View v) {
             super(v);
             // connect views object with views id in xml
-            mImgThumbnail= (ImageView) v.findViewById(R.id.imgThumbnail);
-            mTxtTitle    = (TextView) v.findViewById(R.id.txtPrimaryText);
-            mTxtTime     = (TextView) v.findViewById(R.id.txtSecondaryText);
-            mBtnAction   = (RelativeLayout) v.findViewById(R.id.btnAction);
-            mItemContainer   = (RelativeLayout) v.findViewById(R.id.item_container);
-            mBtnAction.setVisibility(View.VISIBLE);
+            mImgThumbnail = (ImageView) v.findViewById(R.id.imgThumbnail);
+            mTxtTitle = (TextView) v.findViewById(R.id.txtPrimaryText);
+            mTxtTime = (TextView) v.findViewById(R.id.txtSecondaryText);
+            mBtnAction = (IconicsImageView) v.findViewById(R.id.lytButtonLayout);
+            mItemContainer = (ConstraintLayout) v.findViewById(R.id.item_container);
         }
     }
 
@@ -269,8 +260,7 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
             ArrayList<String> workoutNames,
             ArrayList<String> workoutImages,
             ArrayList<String> workoutTimes,
-            ArrayList<String> workoutSteps)
-    {
+            ArrayList<String> workoutSteps) {
         this.mProgramIds.clear();
         this.mProgramIds.addAll(mProgramIds);
 
@@ -307,8 +297,8 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
     }
 
     // Method to get data of arraylist variables
-    public ArrayList<String> getData(int i){
-        switch(i){
+    public ArrayList<String> getData(int i) {
+        switch (i) {
             case 0:
                 return mWorkoutIds;
             case 1:
@@ -322,15 +312,14 @@ public class AdapterWorkouts extends RecyclerView.Adapter<AdapterWorkouts.ViewHo
     }
 
     // Method to update views
-    public void updateViews(){
+    public void updateViews() {
         ActivityWorkouts.sList.setVisibility(View.GONE);
         ActivityWorkouts.sLytSubHeader.setVisibility(View.GONE);
         ActivityWorkouts.sTxtAlert.setVisibility(View.VISIBLE);
     }
 
     // Method to set listener to handle item click
-    public void setOnTapListener(OnTapListener onTapListener)
-    {
+    public void setOnTapListener(OnTapListener onTapListener) {
         this.onTapListener = onTapListener;
     }
 }

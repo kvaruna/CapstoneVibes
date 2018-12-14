@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
-            <com.github.OrangeGangsters.circularbarpager.library.CircularBarPager
+            <com.example.circular_bar_pager_library.CircularBarPager
                 android:id="@+id/circularBarPager"
                 android:layout_height="@dimen/circular_bar_width_and_height"
                 android:layout_width="@dimen/circular_bar_width_and_height"

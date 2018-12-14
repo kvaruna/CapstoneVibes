@@ -1,6 +1,7 @@
 package com.example.varun.pushit.Adapters;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,40 +66,37 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (mHeaderView == null) {
             return mCategoryIds.size();
         } else {
-            return mCategoryIds.size() + 1;
+            return mCategoryIds.size();
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        return VIEW_TYPE_ITEM;
+//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == VIEW_TYPE_HEADER) {
-            return new HeaderViewHolder(mHeaderView);
-        } else {
-            return new ItemViewHolder(mInflater.inflate(R.layout.adapter_list, parent, false));
-        }
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_list, parent, false);
+        return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position)
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position)
     {
         if(viewHolder instanceof ItemViewHolder){
             ((ItemViewHolder) viewHolder).mItemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onTapListener != null)
-                        onTapListener.onTapView(mCategoryIds.get(position - 1), mCategoryNames.get(position - 1));
+                        onTapListener.onTapView(mCategoryIds.get(viewHolder.getAdapterPosition()), mCategoryNames.get(viewHolder.getAdapterPosition()));
                 }
             });
 
-            ((ItemViewHolder) viewHolder).mTxtWorkoutName.setText(mCategoryNames.get(position - 1));
+            ((ItemViewHolder) viewHolder).mTxtWorkoutName.setText(mCategoryNames.get(viewHolder.getAdapterPosition()));
 
             // Get total workout
-            int count = Integer.parseInt(mTotalWorkouts.get(position - 1));
+            int count = Integer.parseInt(mTotalWorkouts.get(viewHolder.getAdapterPosition()));
 
             // If total workout is more than one then add 's'
             if(count > 1){
@@ -108,7 +106,7 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             // Set image to ImageView
-            int image = mContext.getResources().getIdentifier(mCategoryImages.get(position - 1), "drawable", mContext.getPackageName());
+            int image = mContext.getResources().getIdentifier(mCategoryImages.get(viewHolder.getAdapterPosition()), "drawable", mContext.getPackageName());
 
             // Load image lazily
             mImageLoader.loadBitmap(image, ((ItemViewHolder) viewHolder).mImgCategoryImage);
@@ -128,7 +126,7 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
         // Create view objects
         private ImageView mImgCategoryImage;
         private TextView mTxtWorkoutName, mTxtWorkoutNumber;
-        private RelativeLayout mItemContainer;
+        private ConstraintLayout mItemContainer;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -136,7 +134,7 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
             mImgCategoryImage   = (ImageView) view.findViewById(R.id.imgThumbnail);
             mTxtWorkoutName     = (TextView) view.findViewById(R.id.txtPrimaryText);
             mTxtWorkoutNumber   = (TextView) view.findViewById(R.id.txtSecondaryText);
-            mItemContainer      = (RelativeLayout) view.findViewById(R.id.item_container);
+            mItemContainer      = (ConstraintLayout) view.findViewById(R.id.item_container);
         }
     }
 

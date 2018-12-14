@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             // When progress finished, open ActivityHome
             Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(homeIntent);
+            finish();
         }
     }
 

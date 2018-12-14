@@ -58,7 +58,7 @@ public class Widget extends AppWidgetProvider implements LoaderManager.LoaderCal
             mDbHelperPrograms = new DBHelperPrograms(context.getApplicationContext());
             mDbHelperPrograms.openDataBase();
             ArrayList<ArrayList<Object>> data;
-            AllWorkouts=" ";
+            AllWorkouts="";
             mWorkoutNames.clear();
             data = mDbHelperPrograms.getAllWorkoutsByDay(String.valueOf(dayOfWeek));
             for (int i = 0; i < data.size(); i++) {
@@ -66,7 +66,7 @@ public class Widget extends AppWidgetProvider implements LoaderManager.LoaderCal
 
                 mWorkoutNames.add(row.get(2).toString());
 
-                AllWorkouts= AllWorkouts+mWorkoutNames.get(i)+"\n";
+                AllWorkouts= AllWorkouts+"-"+mWorkoutNames.get(i)+"\n";
 
                 views.setTextViewText(R.id.Today,AllWorkouts);
                 appWidgetManager.updateAppWidget(appWidgetId, views);

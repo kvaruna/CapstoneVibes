@@ -2,7 +2,7 @@
     <!-- preference for displaying app information -->
     <com.example.material_preferences_library.custom_preferences.Preference
         android:title="@string/pref_app_title"
-        android:summary="@string/pref_app_summary"/>
+        android:summary="@string/app_name"/>
 
     <com.example.material_preferences_library.custom_preferences.Preference
         android:title="@string/pref_version_title"

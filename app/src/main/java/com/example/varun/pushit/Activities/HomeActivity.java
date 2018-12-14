@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity implements
     private ViewPager mPager;
 
     // Create adapter object
-    private AdapterNavigation mAdapterNavigation;
+    public AdapterNavigation mAdapterNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +56,10 @@ public class HomeActivity extends AppCompatActivity implements
 
 
         models.add(new NavigationTabBar.Model.Builder(getResources().getDrawable(R.drawable.workout),
-                Color.parseColor("#9EA31C")).title("WORKOUTS").badgeTitle("WORKOUTS").build());
+                Color.parseColor("#6da5ff")).title("WORKOUTS").badgeTitle("WORKOUTS").build());
 
         models.add(new NavigationTabBar.Model.Builder(getResources().getDrawable(R.drawable.event),
-                Color.parseColor("#9EA31C")).title("SCHEDULE").badgeTitle("SCHEDULE").build());
+                Color.parseColor("#6da5ff")).title("SCHEDULE").badgeTitle("SCHEDULE").build());
 
 
 
@@ -76,9 +76,9 @@ public class HomeActivity extends AppCompatActivity implements
         navigationTabBar.setBadgeBgColor(Color.RED);
         navigationTabBar.setBadgeTitleColor(Color.WHITE);
         navigationTabBar.setIsSwiped(true);
-        navigationTabBar.setBgColor(Color.BLACK);
+        navigationTabBar.setBgColor(Color.WHITE);
         navigationTabBar.setBadgeSize(10);
-        navigationTabBar.setTitleSize(10);
+        navigationTabBar.setTitleSize(21);
         navigationTabBar.setIconSizeFraction((float) 0.5);
 
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

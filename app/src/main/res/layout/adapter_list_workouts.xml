@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/material_background_color">
+
+
+    <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imgThumbnail"
+        android:layout_width="@dimen/thumb_height"
+        android:layout_height="@dimen/thumb_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtPrimaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="sfsdf"
+        android:textColor="@color/text_and_icon_color"
+        android:textSize="@dimen/title"
+        app:layout_constraintStart_toEndOf="@+id/imgThumbnail"
+        app:layout_constraintTop_toTopOf="@+id/imgThumbnail" />
+
+    <TextView
+        android:id="@+id/txtSecondaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtPrimaryText"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="skjdbfksbf"
+        android:textColor="@color/text_and_icon_color"
+        app:layout_constraintBottom_toBottomOf="@+id/imgThumbnail"
+        app:layout_constraintStart_toEndOf="@+id/imgThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/txtPrimaryText"/>
+
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/lytButtonLayout"
+        android:layout_width="@dimen/small_thumb_width"
+        android:layout_height="@dimen/small_thumb_height"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:iiv_color="@color/text_and_icon_color"
+        app:iiv_icon="gmd-info"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

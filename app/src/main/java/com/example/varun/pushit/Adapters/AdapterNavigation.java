@@ -53,6 +53,16 @@ public class AdapterNavigation extends CacheFragmentStatePagerAdapter {
     }
 
     @Override
+    public Fragment getItemAt(int position) {
+        return super.getItemAt(position);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return super.getItem(position);
+    }
+
+    @Override
     public CharSequence getPageTitle(int position) {
         return sPagerTitles[position];
     }

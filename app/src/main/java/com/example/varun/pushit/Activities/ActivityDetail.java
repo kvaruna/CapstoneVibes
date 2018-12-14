@@ -23,6 +23,8 @@ import com.example.varun.pushit.Views.ViewSteps;
 import com.example.varun.pushit.Views.ViewWorkout;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.mrengineer13.snackbar.SnackBar;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -43,8 +45,7 @@ public class ActivityDetail extends AppCompatActivity implements
     private TextView mTxtTitle, mTxtSubTitle;
     private LinearLayout lytTitleLayout;
     private CirclePageIndicator mCirclePageIndicator;
-
-
+    private AdView mAdView;
 
     // Create database helper class object
     private DBHelperPrograms mDbHelperPrograms;
@@ -56,7 +57,7 @@ public class ActivityDetail extends AppCompatActivity implements
     private String mWorkoutImage;
     private String mWorkoutTime;
     private String mWorkoutSteps;
-    private ArrayList<String> mWorkoutGalleries    = new ArrayList<>();
+    private ArrayList<String> mWorkoutGalleries = new ArrayList<>();
 
     // Create array variable to store days
     private String[] mDays;
@@ -67,22 +68,22 @@ public class ActivityDetail extends AppCompatActivity implements
         setContentView(R.layout.activity_detail);
 
         // Get days from strings.xml
-        mDays               = getResources().getStringArray(R.array.day_names);
+        mDays = getResources().getStringArray(R.array.day_names);
 
         // Get data from previous activity
         // Get data that passed from previous activity
-        Intent iGet         = getIntent();
-        mWorkoutId          = iGet.getStringExtra(Utils.ARG_WORKOUT_ID);
+        Intent iGet = getIntent();
+        mWorkoutId = iGet.getStringExtra(Utils.ARG_WORKOUT_ID);
 
         // Connect view objects with view ids in xml
-        mToolbar            = (Toolbar) findViewById(R.id.toolbar);
-        mFabAdd             = (FloatingActionButton) findViewById(R.id.fabAdd);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mFabAdd = (FloatingActionButton) findViewById(R.id.fabAdd);
 
-        mPrgLoading         = (CircleProgressBar) findViewById(R.id.prgLoading);
-        mCircularBarPager   = (CircularBarPager) findViewById(R.id.circularBarPager);
-        mTxtTitle           = (TextView) findViewById(R.id.txtTitle);
-        mTxtSubTitle        = (TextView) findViewById(R.id.txtSubTitle);
-        lytTitleLayout      = (LinearLayout) findViewById(R.id.lytTitleLayout);
+        mPrgLoading = (CircleProgressBar) findViewById(R.id.prgLoading);
+        mCircularBarPager = (CircularBarPager) findViewById(R.id.circularBarPager);
+        mTxtTitle = (TextView) findViewById(R.id.txtTitle);
+        mTxtSubTitle = (TextView) findViewById(R.id.txtSubTitle);
+        lytTitleLayout = (LinearLayout) findViewById(R.id.lytTitleLayout);
 
         // Set click listener to fab button
         mFabAdd.setOnClickListener(this);
@@ -91,7 +92,6 @@ public class ActivityDetail extends AppCompatActivity implements
         mCirclePageIndicator = mCircularBarPager.getCirclePageIndicator();
         mCirclePageIndicator.setFillColor(ContextCompat.getColor(this, R.color.accent_color));
         mCirclePageIndicator.setStrokeColor(ContextCompat.getColor(this, R.color.divider_color));
-
 
 
         // Set progress circle loading color
@@ -117,7 +117,7 @@ public class ActivityDetail extends AppCompatActivity implements
         try {
             mDbHelperPrograms.createDataBase();
             mDbHelperWorkouts.createDataBase();
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
 
@@ -126,7 +126,157 @@ public class ActivityDetail extends AppCompatActivity implements
         mDbHelperWorkouts.openDataBase();
     }
 
+    // Method to add gallery images and steps to view pager in UI thread
+    private void startViewPagerThread() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int i = 0;
+                View[] viewFlippers = new View[2];
+                // View for gallery images
+                viewFlippers[0] = new ViewWorkout(ActivityDetail.this,
+                        mWorkoutGalleries);
+                // View for steps
+                viewFlippers[1] = new ViewSteps(ActivityDetail.this,
+                        mWorkoutSteps);
+                mCircularBarPager.setViewPagerAdapter(new AdapterPagerWorkout(
+                        ActivityDetail.this, viewFlippers));
 
+                mPrgLoading.setVisibility(View.GONE);
+                mToolbar.setVisibility(View.VISIBLE);
+                mCircularBarPager.setVisibility(View.VISIBLE);
+                mFabAdd.setVisibility(View.VISIBLE);
+                lytTitleLayout.setVisibility(View.VISIBLE);
+                mAdView = findViewById(R.id.adView);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
+            }
+        });
+
+    }
+
+    // Method to fetch workout detail from database
+    public void getWorkoutDetailFromDatabase() {
+
+        ArrayList<Object> data;
+        data = mDbHelperWorkouts.getWorkoutDetail(mWorkoutId);
+
+        mWorkoutId = data.get(0).toString();
+        mWorkoutName = data.get(1).toString();
+        mWorkoutImage = data.get(2).toString();
+        mWorkoutTime = data.get(3).toString();
+        mWorkoutSteps = data.get(4).toString();
+
+    }
+
+    // Method to get workout gallery images from database
+    private void getWorkoutGalleryImagesFromDatabase() {
+        ArrayList<ArrayList<Object>> data;
+        data = mDbHelperWorkouts.getImages(mWorkoutId);
+
+        if (data.size() > 0) {
+            // If gallery is available then store data to variables
+            for (int i = 0; i < data.size(); i++) {
+                ArrayList<Object> row = data.get(i);
+                mWorkoutGalleries.add(row.get(0).toString());
+            }
+        } else {
+            mWorkoutGalleries.add(mWorkoutImage);
+        }
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fabAdd:
+                // When add fab click show days dialog
+                showDayListDialog();
+            default:
+                break;
+        }
+    }
+
+    // Method to display day list dialog
+    public void showDayListDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.days)
+                .items(R.array.day_names)
+                .positiveText(R.string.add)
+                .negativeText(R.string.cancel)
+                .cancelable(false)
+                .positiveColorRes(R.color.primary_color)
+                .negativeColorRes(R.color.primary_color)
+                // When positive button clicked
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view,
+                                                       int selectedIndex, CharSequence text) {
+                                // Check workout whether it is already available
+                                // in selected day program
+                                if (mDbHelperPrograms.isDataAvailable((selectedIndex + 1),
+                                        mWorkoutId)) {
+
+                                    // If workout has already added to selected day program
+                                    // inform user with snackbar
+                                    showSnackbar(getString(R.string.workout_already_added) + " " +
+                                            mDays[selectedIndex] + " " +
+                                            getString(R.string.program) + ".");
+                                } else {
+                                    // If it has not added yet add it to programs database
+                                    mDbHelperPrograms.addData(
+                                            Integer.valueOf(mWorkoutId),
+                                            mWorkoutName,
+                                            (selectedIndex + 1),
+                                            mWorkoutImage,
+                                            mWorkoutTime,
+                                            mWorkoutSteps);
+
+                                    ContentValues values = new ContentValues();
+                                    values.put(GymProvider.PROGRAM_NAME, mWorkoutName);
+                                    values.put(GymProvider.PROGRAM_WORKOUT_ID, mWorkoutId);
+                                    values.put(GymProvider.PROGRAM_IMAGE, mWorkoutImage);
+                                    values.put(GymProvider.PROGRAM_TIME, mWorkoutTime);
+                                    values.put(GymProvider.PROGRAM_STEP, mWorkoutSteps);
+
+
+                                    getApplicationContext().getContentResolver().insert(GymProvider.CONTENT_URI, values);
+
+
+                                    // After that inform user that workout successfully
+                                    // added to database with snackbar
+                                    showSnackbar(getString(R.string.workout_successfully_added) +
+                                            " " + mDays[selectedIndex] + " " +
+                                            getString(R.string.program) + ".");
+                                }
+                                return true;
+                            }
+                        }
+                )
+                // When negative button clicked
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        // Close days dialog
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    // Method to show snackbar message
+    public void showSnackbar(String message) {
+        new SnackBar.Builder(this)
+                .withMessage(message)
+                .show();
+    }
+
+    // Method to handle physical back button with animation
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     // Asynctask class to load data from database in background
     private class AsyncGetWorkoutDetail extends AsyncTask<Void, Void, Void> {
@@ -206,157 +356,6 @@ public class ActivityDetail extends AppCompatActivity implements
 
 
         }
-    }
-
-    // Method to add gallery images and steps to view pager in UI thread
-    private void startViewPagerThread() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int i = 0;
-                View[] viewFlippers = new View[2];
-                // View for gallery images
-                viewFlippers[0] = new ViewWorkout(ActivityDetail.this,
-                        mWorkoutGalleries);
-                // View for steps
-                viewFlippers[1] = new ViewSteps(ActivityDetail.this,
-                        mWorkoutSteps);
-                mCircularBarPager.setViewPagerAdapter(new AdapterPagerWorkout(
-                        ActivityDetail.this, viewFlippers));
-
-                mPrgLoading.setVisibility(View.GONE);
-                mToolbar.setVisibility(View.VISIBLE);
-                mCircularBarPager.setVisibility(View.VISIBLE);
-                mFabAdd.setVisibility(View.VISIBLE);
-                lytTitleLayout.setVisibility(View.VISIBLE);
-            }
-        });
-
-    }
-
-    // Method to fetch workout detail from database
-    public void getWorkoutDetailFromDatabase() {
-
-        ArrayList<Object> data;
-        data = mDbHelperWorkouts.getWorkoutDetail(mWorkoutId);
-
-        mWorkoutId     = data.get(0).toString();
-        mWorkoutName   = data.get(1).toString();
-        mWorkoutImage  = data.get(2).toString();
-        mWorkoutTime   = data.get(3).toString();
-        mWorkoutSteps  = data.get(4).toString();
-
-    }
-
-    // Method to get workout gallery images from database
-    private void getWorkoutGalleryImagesFromDatabase(){
-        ArrayList<ArrayList<Object>> data;
-        data = mDbHelperWorkouts.getImages(mWorkoutId);
-
-        if(data.size() > 0) {
-            // If gallery is available then store data to variables
-            for (int i = 0; i < data.size(); i++) {
-                ArrayList<Object> row = data.get(i);
-                mWorkoutGalleries.add(row.get(0).toString());
-            }
-        }else {
-            mWorkoutGalleries.add(mWorkoutImage);
-        }
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fabAdd:
-                // When add fab click show days dialog
-                showDayListDialog();
-            default:
-                break;
-        }
-    }
-
-    // Method to display day list dialog
-    public void showDayListDialog() {
-        new MaterialDialog.Builder(this)
-                .title(R.string.days)
-                .items(R.array.day_names)
-                .positiveText(R.string.add)
-                .negativeText(R.string.cancel)
-                .cancelable(false)
-                .positiveColorRes(R.color.primary_color)
-                .negativeColorRes(R.color.primary_color)
-                // When positive button clicked
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view,
-                                                       int selectedIndex, CharSequence text) {
-                                // Check workout whether it is already available
-                                // in selected day program
-                                if (mDbHelperPrograms.isDataAvailable((selectedIndex + 1),
-                                        mWorkoutId)) {
-
-                                    // If workout has already added to selected day program
-                                    // inform user with snackbar
-                                    showSnackbar(getString(R.string.workout_already_added) + " " +
-                                            mDays[selectedIndex] + " " +
-                                            getString(R.string.program) + ".");
-                                } else {
-                                    // If it has not added yet add it to programs database
-                                    mDbHelperPrograms.addData(
-                                            Integer.valueOf(mWorkoutId),
-                                            mWorkoutName,
-                                            (selectedIndex + 1),
-                                            mWorkoutImage,
-                                            mWorkoutTime,
-                                            mWorkoutSteps);
-
-                                    ContentValues values = new ContentValues();
-                                    values.put(GymProvider.PROGRAM_NAME,mWorkoutName);
-                                    values.put(GymProvider.PROGRAM_WORKOUT_ID,mWorkoutId);
-                                    values.put(GymProvider.PROGRAM_IMAGE,mWorkoutImage);
-                                    values.put(GymProvider.PROGRAM_TIME,mWorkoutTime);
-                                    values.put(GymProvider.PROGRAM_STEP,mWorkoutSteps);
-
-
-                                    getApplicationContext().getContentResolver().insert(GymProvider.CONTENT_URI, values);
-
-
-                                    // After that inform user that workout successfully
-                                    // added to database with snackbar
-                                    showSnackbar(getString(R.string.workout_successfully_added) +
-                                            " " + mDays[selectedIndex] + " " +
-                                            getString(R.string.program) + ".");
-                                }
-                                return true;
-                            }
-                        }
-                )
-                // When negative button clicked
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        // Close days dialog
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-
-    // Method to show snackbar message
-    public void showSnackbar(String message){
-        new SnackBar.Builder(this)
-                .withMessage(message)
-                .show();
-    }
-
-    // Method to handle physical back button with animation
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }
 

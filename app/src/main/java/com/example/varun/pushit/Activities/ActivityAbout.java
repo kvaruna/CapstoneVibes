@@ -1,8 +1,8 @@
 package com.example.varun.pushit.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.material_preferences_library.PreferenceActivity;
 import com.example.material_preferences_library.custom_preferences.Preference;
@@ -15,8 +15,7 @@ public class ActivityAbout extends PreferenceActivity implements Preference.OnPr
     private Preference mPrefRateReviewKey;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState)
-    {
+    protected void onCreate(final Bundle savedInstanceState) {
         // Set preference theme, you can configure the color theme
         // via res/values/styles.xml
         setTheme(R.style.AppTheme_Dark);
@@ -33,8 +32,7 @@ public class ActivityAbout extends PreferenceActivity implements Preference.OnPr
     }
 
     @Override
-    protected int getPreferencesXmlId()
-    {
+    protected int getPreferencesXmlId() {
         // Connect preference activity with preference xml
         return R.xml.pref_about;
     }
@@ -42,7 +40,7 @@ public class ActivityAbout extends PreferenceActivity implements Preference.OnPr
 
     @Override
     public boolean onPreferenceClick(android.preference.Preference preference) {
-        switch(preference.getKey()){
+        switch (preference.getKey()) {
             case "prefShareKey":
                 // Share Google Play url via other apps such as message, email, facebook, etc.
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -53,9 +51,10 @@ public class ActivityAbout extends PreferenceActivity implements Preference.OnPr
                 break;
             case "prefRateReviewKey":
                 // Open App page on Google Play so that user can rate and review the app.
-                Intent rateReviewIntent = new Intent(Intent.ACTION_VIEW);
-                rateReviewIntent.setData(Uri.parse(getString(R.string.google_play_url)));
-                startActivity(rateReviewIntent);
+                Toast.makeText(this, "Land user on google play", Toast.LENGTH_SHORT).show();
+//                Intent rateReviewIntent = new Intent(Intent.ACTION_VIEW);
+//                rateReviewIntent.setData(Uri.parse(getString(R.string.google_play_url)));
+//                startActivity(rateReviewIntent);
                 break;
         }
         return true;

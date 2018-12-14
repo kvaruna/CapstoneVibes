@@ -38,8 +38,8 @@
     <string name="pref_app_summary">Fitness_Workout</string>
     <string name="pref_version_title">Build Version</string>
     <string name="pref_version_summary">Version 1.0</string>
-    <string name="pref_developer_title">Developer</string>
-    <string name="pref_developer_summary">Sohaib Udacity</string>
+    <string name="pref_developer_title">Software engineer</string>
+    <string name="pref_developer_summary">Varun Kulkarni</string>
 
     <string name="pref_share_title">Tell a Friend</string>
     <string name="pref_share_summary">Tell your friend about this app</string>
@@ -52,7 +52,7 @@
 
     <!-- Sharing content -->
     <string name="share_to">Share to</string>
-    <string name="subject">Stay Fit with This App</string>
+    <string name="subject">Stay Fit with Push it App</string>
     <string name="message"> is fitness app that will help you stay fit everyday. Download it at </string>
     <string name="sent_via_message">This message was sent from</string>
     <string name="download">Download</string>
@@ -61,8 +61,9 @@
 
     <!-- Snackbar messages -->
     <string name="workout_already_added">Workout has already added to</string>
-    <string name="workout_successfully_added">Successfully add workout to</string>
-    <string name="success_remove">Workout has been removed from</string>
+    <string name="workout_successfully_added">Workout added successfully</string>
+    <string name="success_remove">Workout removed from</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- Dialog messages -->
     <string name="days">Select Day to Add</string>

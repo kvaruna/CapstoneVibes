@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/subhead"
-                    android:textColor="@color/accent_color"
+                    android:textColor="@color/text_and_icon_color"
                     android:layout_below="@+id/txtWorkoutName"
                     android:ellipsize="end"
                     android:singleLine="true"/>

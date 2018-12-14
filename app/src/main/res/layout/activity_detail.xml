@@ -16,7 +16,7 @@
         android:layout_centerInParent="true"
         android:orientation="vertical">
 
-        <com.github.OrangeGangsters.circularbarpager.library.CircularBarPager
+        <com.example.circular_bar_pager_library.CircularBarPager
             android:id="@+id/circularBarPager"
             android:layout_height="@dimen/circular_bar_width_and_height"
             android:layout_width="@dimen/circular_bar_width_and_height"
@@ -73,5 +73,13 @@
         android:layout_centerInParent="true"
         app:mlpb_enable_circle_background="true"
         app:mlpb_background_color="@color/material_background_color"/>
-
+   <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
 </RelativeLayout>
